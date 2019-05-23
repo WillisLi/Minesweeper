@@ -39,16 +39,27 @@ public void draw ()
 }
 public boolean isWon()
 {
-    //your code here
+    int winCount = 0;
+    for(int i = 0; i < bombs.size(); i++)
+      if(bombs.get(i).isMarked() == true){
+        winCount = winCount + 1;
+        if(winCount == bombs.size())
+          return true;
+        }
     return false;
 }
 public void displayLosingMessage()
 {
-    //your code here
+    for(int i = 0; i < bombs.size(); i++){
+      bombs.get(i).clicked = true;
+      bombs.get(i).setLabel(">:)");
+    }
 }
 public void displayWinningMessage()
 {
-    //your code here
+    for(int r = 0; r < NUM_ROWS; r++){
+      for(int c = 0; c < NUM_COLS;c++){
+        buttons[r][c].setLabel(":)");
 }
 
 public class MSButton
@@ -85,7 +96,7 @@ public class MSButton
         clicked = true;
         if(mouseButton == RIGHT)
           marked = true;
-        if(mouseButton == RIGHT && marked == false)
+        if(mouseButton == RIGHT && marked == false){
           clicked = false;
         }else if(bombs.contains(this)){
           displayLosingMessage();
@@ -93,6 +104,7 @@ public class MSButton
           label = "" + countBombs(r, c);
         }else{
           buttons[r][c - 1].mousePressed();
+        }
     }
 
     public void draw () 
