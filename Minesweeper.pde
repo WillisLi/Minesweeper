@@ -52,14 +52,14 @@ public void displayLosingMessage()
 {
     for(int i = 0; i < bombs.size(); i++){
       bombs.get(i).clicked = true;
-      bombs.get(i).setLabel(">:)");
+      bombs.get(i).setLabel("Lose");
     }
 }
 public void displayWinningMessage()
 {
-    for(int r = 0; r < NUM_ROWS; r++){
-      for(int c = 0; c < NUM_COLS;c++){
-        buttons[r][c].setLabel(":)");
+    for(int r = 0; r < NUM_ROWS; r++)
+      for(int c = 0; c < NUM_COLS;c++)
+        buttons[r][c].setLabel("Win");
 }
 
 public class MSButton
@@ -94,16 +94,20 @@ public class MSButton
     public void mousePressed () 
     {
         clicked = true;
-        if(mouseButton == RIGHT)
+        if(mouseButton == RIGHT){
           marked = true;
-        if(mouseButton == RIGHT && marked == false){
+        }else if(mouseButton == RIGHT && marked == true){
           clicked = false;
+          marked = false;
         }else if(bombs.contains(this)){
           displayLosingMessage();
         }else if(countBombs(r, c) > 0){
-          label = "" + countBombs(r, c);
+          setLabel("" + countBombs(r,c));
         }else{
-          buttons[r][c - 1].mousePressed();
+          for(int x = r-1; x <= r+1;x++)
+            for(int y = c-1; y <= c+1;y++)
+              if(isValid(x,y) == true && buttons[x][y].isClicked() == false)
+                buttons[x][y].mousePressed();
         }
     }
 
@@ -135,8 +139,11 @@ public class MSButton
     }
     public int countBombs(int row, int col)
     {
-        int numBombs = 0;
-        
+      int numBombs = 0;
+        for(int r = row - 1; r <= row + 1; r++)
+          for(int c = col - 1; c <= col + 1; c++)
+            if(this.isValid(r,c) == true && bombs.contains(buttons[r][c])==true)
+              numBombs = numBombs + 1;
         return numBombs;
     }
 }
